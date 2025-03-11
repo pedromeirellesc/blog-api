@@ -10,5 +10,10 @@ class PostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_get_posts() {}
+    public function getPosts(): void
+    {
+        $response = $this->get('/posts');
+
+        $response->assertStatus(200);
+    }
 }
