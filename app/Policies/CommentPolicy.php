@@ -7,9 +7,6 @@ use App\Models\User;
 
 class CommentPolicy
 {
-    /**
-     * Create a new policy instance.
-     */
     public function __construct() {}
 
     public function update(User $user, Comment $comment)

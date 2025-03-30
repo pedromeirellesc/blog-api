@@ -6,7 +6,6 @@ use App\Http\Requests\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller

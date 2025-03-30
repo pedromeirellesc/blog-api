@@ -7,19 +7,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'text' => $this->text,
+            'content' => $this->content,
             'comments' => CommentResource::collection($this->comments),
-            'creator' => new UserResource($this->user),
+            'author' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+            ],
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at
         ];

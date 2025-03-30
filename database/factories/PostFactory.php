@@ -18,7 +18,7 @@ class PostFactory extends Factory
         return [
             'user_id' => \App\Models\User::factory(),
             'title' => $this->faker->sentence,
-            'text' => $this->faker->paragraph,
+            'content' => $this->faker->paragraph,
             'created_at' => $this->faker->dateTimeBetween('-1 year'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year'),
         ];

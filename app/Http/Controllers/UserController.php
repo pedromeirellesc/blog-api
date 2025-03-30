@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
+class UserController extends Controller
 {
 
     public function register(Request $request)
@@ -60,5 +62,28 @@ class AuthController extends Controller
         return [
             'message' => "You're logged out."
         ];
+    }
+
+    public function show(int $id)
+    {
+
+        try {
+            $user = User::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response([
+                'status' => 'error',
+                'error' => "Register #{$id} not found."
+            ], 404);
+        }
+
+        $user->load(['posts' => function ($query) {
+            $query->orderBy('created_at', 'DESC');
+        }, 'comments' => function ($query) {
+            $query->orderBy('created_at', 'DESC');
+        }]);
+
+        return response()->json([
+            'user' => new UserResource($user)
+        ], 200);
     }
 }

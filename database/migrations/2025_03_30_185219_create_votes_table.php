@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->morphs('votable');
             $table->unsignedBigInteger('user_id');
-            $table->text('content');
-            $table->foreign('parent_id')->references('id')->on('comments')->onDelete('cascade');
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->enum('vote', ['up', 'down']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unique(['votable_id', 'votable_type', 'user_id'], 'unique_vote');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('votes');
     }
 };

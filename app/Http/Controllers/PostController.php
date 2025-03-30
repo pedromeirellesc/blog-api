@@ -42,7 +42,9 @@ class PostController extends Controller
             ], 404);
         }
 
-        $post->load('comments');
+        $post->load(['comments' => function ($query) {
+            $query->orderBy('created_at', 'DESC');
+        }]);
         $post->load('user');
 
         return response()->json([

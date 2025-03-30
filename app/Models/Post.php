@@ -13,10 +13,8 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'title',
-        'author',
-        'text'
+        'content'
     ];
 
     public function comments(): HasMany
