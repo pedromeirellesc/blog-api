@@ -14,6 +14,7 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'comments' => CommentResource::collection($this->comments),
+            'countVotes' => $this->count_votes,
             'author' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
