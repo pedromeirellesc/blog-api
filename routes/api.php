@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('comments/{id}', [CommentController::class, 'destroy']);
 
     Route::post('votes', [VoteController::class, 'vote']);
+
+    Route::post('/follow/{id}', [FollowController::class, 'follow']);
+    Route::post('/unfollow/{id}', [FollowController::class, 'unfollow']);
 });
 
 Route::post('/register', [UserController::class, 'register'])->name('register');

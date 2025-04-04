@@ -24,7 +24,7 @@ class PostController extends Controller
     {
         $postValidated = $request->validated();
 
-        $post = $request->user()->posts()->create($postValidated);
+        $post = $postValidated->user()->posts()->create($postValidated);
 
         return response()->json([
             'message' => 'Post created successfully.',

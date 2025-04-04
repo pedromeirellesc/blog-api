@@ -12,7 +12,7 @@ class VoteController extends Controller
     {
         $voteValidated = $request->validated();
 
-        $user = $request->user();
+        $user = $voteValidated->user();
 
         $existingVote = $user->votes()->where([
             'votable_type' => $voteValidated['votable_type'],
