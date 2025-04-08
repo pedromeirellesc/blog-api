@@ -13,10 +13,10 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('comments')->orderBy('created_at', 'DESC')->paginate(10);
+        $posts = Post::orderBy('created_at', 'DESC')->paginate(10);
 
         return response()->json([
-            'posts' => PostResource::collection($posts)
+            'posts' => PostResource::collection($posts),
         ]);
     }
 
@@ -24,11 +24,11 @@ class PostController extends Controller
     {
         $postValidated = $request->validated();
 
-        $post = $postValidated->user()->posts()->create($postValidated);
+        $post = $request->user()->posts()->create($postValidated);
 
         return response()->json([
             'message' => 'Post created successfully.',
-            'post' => new PostResource($post)
+            'post' => new PostResource($post),
         ], 200);
     }
 
@@ -39,24 +39,33 @@ class PostController extends Controller
         } catch (ModelNotFoundException $e) {
             return response([
                 'status' => 'error',
-                'error' => "Register #{$id} not found."
+                'error' => "Register #{$id} not found.",
             ], 404);
         }
 
         $voteService = new VoteService();
 
         $post->load(['comments' => function ($query) {
+            $query->where('parent_id', null);
+            $query->with(['children' => function ($query) {
+                $query->orderBy('created_at', 'DESC');
+            }]);
             $query->orderBy('created_at', 'DESC');
         }]);
         $post->load('user');
         $post->count_votes = $voteService->getVoteBalance('post', $post->id);
         $post->comments = $post->comments->map(function ($comment) use ($voteService) {
             $comment->count_votes = $voteService->getVoteBalance('comment', $comment->id);
+            $comment->children = $comment->children->map(function ($child) use ($voteService) {
+                $child->count_votes = $voteService->getVoteBalance('comment', $child->id);
+                return $child;
+            });
+
             return $comment;
         });
 
         return response()->json([
-            'post' => new PostResource($post)
+            'post' => new PostResource($post),
         ], 200);
     }
 
@@ -68,16 +77,16 @@ class PostController extends Controller
         } catch (ModelNotFoundException $e) {
             return response([
                 'status' => 'error',
-                'error' => "Register #{$id} not found."
+                'error' => "Register #{$id} not found.",
             ], 404);
         }
 
-        Gate::authorize('delete-post', $post);
+        Gate::authorize('post-delete', $post);
 
         $post->delete();
 
         return response()->json([
-            'msg' => "Post #{$post->id} deleted succesfully."
+            'message' => "Post #{$post->id} deleted successfully.",
         ], 200);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
 class StorePostRequest extends FormRequest
 {
@@ -23,10 +23,9 @@ class StorePostRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): never
     {
-
         throw new HttpResponseException(
             response()->json([
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 400)
         );
     }

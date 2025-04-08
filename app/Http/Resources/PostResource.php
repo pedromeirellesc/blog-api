@@ -19,8 +19,8 @@ class PostResource extends JsonResource
                 'id' => $this->user->id,
                 'name' => $this->user->name,
             ],
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at
+            'createdAt' => date('d/m/Y H:i:s', strtotime($this->created_at)),
+            'updatedAt' => date('d/m/Y H:i:s', strtotime($this->updated_at)),
         ];
     }
 }

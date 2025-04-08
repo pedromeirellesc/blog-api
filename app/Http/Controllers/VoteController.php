@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreVoteRequest;
 
-
 class VoteController extends Controller
 {
-
     public function vote(StoreVoteRequest $request)
     {
         $voteValidated = $request->validated();
 
-        $user = $voteValidated->user();
+        $user = $request->user();
 
         $existingVote = $user->votes()->where([
             'votable_type' => $voteValidated['votable_type'],
@@ -21,11 +19,11 @@ class VoteController extends Controller
 
         if ($existingVote) {
 
-            if ($existingVote->vote === $voteValidated['vote']) {
+            if ($existingVote->vote->value === $voteValidated['vote']) {
                 $existingVote->delete();
 
                 return response()->json([
-                    'message' => 'Vote removed successfully.'
+                    'message' => 'Vote removed successfully.',
                 ], 200);
             }
         }
@@ -41,7 +39,7 @@ class VoteController extends Controller
         );
 
         return response()->json([
-            'message' => 'Vote recorded successfully.'
+            'message' => 'Vote recorded successfully.',
         ], 200);
     }
 }

@@ -10,14 +10,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-
     public function register(Request $request)
     {
 
         $fields = $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
         ]);
 
         $user = User::create($fields);
@@ -26,7 +25,7 @@ class UserController extends Controller
 
         return [
             'user' => $user,
-            'token' => $token->plainTextToken
+            'token' => $token->plainTextToken,
         ];
     }
 
@@ -35,14 +34,14 @@ class UserController extends Controller
 
         $request->validate([
             'email' => 'required|email|exists:users',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return [
-                'message' => 'The provided credentials are incorrect.'
+                'message' => 'The provided credentials are incorrect.',
             ];
         }
 
@@ -50,7 +49,7 @@ class UserController extends Controller
 
         return [
             'user' => $user,
-            'token' => $token->plainTextToken
+            'token' => $token->plainTextToken,
         ];
     }
 
@@ -60,7 +59,7 @@ class UserController extends Controller
         $request->user()->tokens()->delete();
 
         return [
-            'message' => "You're logged out."
+            'message' => "You're logged out.",
         ];
     }
 
@@ -72,7 +71,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return response([
                 'status' => 'error',
-                'error' => "Register #{$id} not found."
+                'error' => "Register #{$id} not found.",
             ], 404);
         }
 
@@ -83,7 +82,7 @@ class UserController extends Controller
         }]);
 
         return response()->json([
-            'user' => new UserResource($user)
+            'user' => new UserResource($user),
         ], 200);
     }
 }

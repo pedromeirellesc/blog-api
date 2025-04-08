@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PostFactory extends Factory
 {
-
     protected $model = Post::class;
 
     public function definition(): array
@@ -19,6 +18,7 @@ class PostFactory extends Factory
             'user_id' => \App\Models\User::factory(),
             'title' => $this->faker->sentence,
             'content' => $this->faker->paragraph,
+            // Setar novos campos
             'created_at' => $this->faker->dateTimeBetween('-1 year'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year'),
         ];

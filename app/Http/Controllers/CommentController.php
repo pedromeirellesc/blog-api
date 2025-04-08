@@ -10,16 +10,6 @@ use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
-
-    public function commentsFromPost(int $postId)
-    {
-        $comments = Comment::where('post_id', '=', $postId)->orderBy('created_at', 'DESC')->paginate('10');
-
-        return response()->json([
-            'comments' => CommentResource::collection($comments)
-        ], 200);
-    }
-
     public function store(StoreCommentRequest $request)
     {
         $commentValidated = $request->validated();
@@ -28,11 +18,11 @@ class CommentController extends Controller
 
         return response()->json([
             'message' => 'Comment created successfully.',
-            'comment' => new CommentResource($comment)
+            'comment' => new CommentResource($comment),
         ], 200);
     }
 
-    public function destroy(Int $id)
+    public function destroy(int $id)
     {
 
         try {
@@ -40,7 +30,7 @@ class CommentController extends Controller
         } catch (ModelNotFoundException $e) {
             return response([
                 'status' => 'error',
-                'error' => "Register #{$id} not found."
+                'error' => "Register #{$id} not found.",
             ], 404);
         }
 
@@ -49,7 +39,7 @@ class CommentController extends Controller
         $comment->delete();
 
         return response()->json([
-            'msg' => "Comment #{$comment->id} deleted succesfully."
+            'message' => "Comment #{$comment->id} deleted successfully.",
         ], 200);
     }
 }

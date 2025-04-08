@@ -24,10 +24,9 @@ class StoreCommentRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): never
     {
-
         throw new HttpResponseException(
             response()->json([
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 400)
         );
     }

@@ -7,14 +7,13 @@ use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
-
-    public function follow(Request $request, $userId)
+    public function follow(Request $request, int $userId)
     {
         $followerId = $request->user()->id;
 
         $request->merge([
             'follower_id' => (int) $request->user()->id,
-            'followed_id' => (int) $userId,
+            'followed_id' => $userId,
         ]);
 
         $request->validate([
@@ -30,7 +29,7 @@ class FollowController extends Controller
 
         if ($exists) {
             return response()->json([
-                'message' => 'You are already following this user.'
+                'message' => 'You are already following this user.',
             ], 422);
         }
 
@@ -41,11 +40,11 @@ class FollowController extends Controller
 
         return response()->json([
             'message' => 'Followed successfully.',
-            'follow' => $follow
+            'follow' => $follow,
         ], 200);
     }
 
-    public function unfollow(Request $request, $userId)
+    public function unfollow(Request $request, int $userId)
     {
 
         $follow = Follow::where('follower_id', $request->user()->id)
@@ -54,13 +53,14 @@ class FollowController extends Controller
 
         if ($follow) {
             $follow->delete();
+
             return response()->json([
-                'message' => 'Unfollowed successfully.'
+                'message' => 'Unfollowed successfully.',
             ], 200);
         }
 
         return response()->json([
-            'message' => 'Not following this user.'
+            'message' => 'Not following this user.',
         ], 404);
     }
 }
