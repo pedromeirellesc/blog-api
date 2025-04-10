@@ -87,7 +87,7 @@ class FollowTest extends TestCase
         $response = $this->actingAs($user)->withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->json('POST', '/api/unfollow/' . $followedUser->id);
+        ])->json('DELETE', '/api/unfollow/' . $followedUser->id);
 
         $response->assertStatus(200)->assertJson([
             'message' => 'Unfollowed successfully.',
@@ -102,7 +102,7 @@ class FollowTest extends TestCase
         $response = $this->actingAs($user)->withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->json('POST', '/api/unfollow/' . $followedUser->id);
+        ])->json('DELETE', '/api/unfollow/' . $followedUser->id);
 
         $response->assertStatus(404)->assertJson([
             'message' => 'Not following this user.',
@@ -114,7 +114,7 @@ class FollowTest extends TestCase
         $response = $this->withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->json('POST', '/api/unfollow/1');
+        ])->json('DELETE', '/api/unfollow/1');
 
         $response->assertStatus(401)->assertExactJson([
             'message' => 'Unauthenticated.',

@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('votes', [VoteController::class, 'vote']);
 
     Route::post('/follow/{id}', [FollowController::class, 'follow']);
-    Route::post('/unfollow/{id}', [FollowController::class, 'unfollow']);
+    Route::delete('/unfollow/{id}', [FollowController::class, 'unfollow']);
 });
 
 Route::post('/register', [UserController::class, 'register'])->name('register');

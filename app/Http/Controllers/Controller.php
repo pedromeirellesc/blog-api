@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
-{
-}
+/**
+ * @OA\Info(title="Blog API", version="1.0")
+ */
+abstract class Controller {}

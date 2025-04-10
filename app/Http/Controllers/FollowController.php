@@ -7,6 +7,49 @@ use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/follow/{userId}",
+     *     summary="Follow a user",
+     *     tags={"Follow"},
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the user to follow",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Followed successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Followed successfully."),
+     *             @OA\Property(property="follow", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="follower_id", type="integer", example=1),
+     *                 @OA\Property(property="followed_id", type="integer", example=2),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-10-01T12:00:00Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-10-01T12:00:00Z")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="You are already following this user.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     * @OA\Tag(name="Follow", description="Follow operations")
+     */
     public function follow(Request $request, int $userId)
     {
         $followerId = $request->user()->id;
@@ -44,6 +87,41 @@ class FollowController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/unfollow/{userId}",
+     *     summary="Unfollow a user",
+     *     tags={"Follow"},
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the user to unfollow",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Unfollowed successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unfollowed successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not following this user",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Not following this user.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
     public function unfollow(Request $request, int $userId)
     {
 

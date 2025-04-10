@@ -29,7 +29,7 @@ class StoreVoteRequest extends FormRequest
         throw new HttpResponseException(
             response()->json([
                 'errors' => $validator->errors(),
-            ], 400)
+            ], 422)
         );
     }
 }

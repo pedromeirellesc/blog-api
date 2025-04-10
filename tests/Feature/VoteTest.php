@@ -59,7 +59,7 @@ class VoteTest extends TestCase
             'vote' => 'up',
         ]);
 
-        $response->assertStatus(400)->assertJsonValidationErrors([
+        $response->assertStatus(422)->assertJsonValidationErrors([
             'votable_type' => 'The selected votable type is invalid.',
         ]);
     }

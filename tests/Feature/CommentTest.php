@@ -78,7 +78,7 @@ class CommentTest extends TestCase
             'content' => '',
         ]);
 
-        $response->assertStatus(400)->assertJsonValidationErrors([
+        $response->assertStatus(422)->assertJsonValidationErrors([
             'content' => [
                 'The content field is required.',
             ],
@@ -98,7 +98,7 @@ class CommentTest extends TestCase
             'parent_id' => 999,
         ]);
 
-        $response->assertStatus(400)->assertJsonValidationErrors([
+        $response->assertStatus(422)->assertJsonValidationErrors([
             'parent_id' => [
                 'The selected parent id is invalid.',
             ],
@@ -117,7 +117,7 @@ class CommentTest extends TestCase
             'content' => 'This is a comment',
         ]);
 
-        $response->assertStatus(400)->assertJsonValidationErrors([
+        $response->assertStatus(422)->assertJsonValidationErrors([
             'post_id' => 'The selected post id is invalid.',
         ]);
     }

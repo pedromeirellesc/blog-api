@@ -51,7 +51,7 @@ class PostTest extends TestCase
             'content' => '',
         ]);
 
-        $response->assertStatus(400)->assertJsonValidationErrors([
+        $response->assertStatus(422)->assertJsonValidationErrors([
             'title' => [
                 'The title field is required.',
             ],
