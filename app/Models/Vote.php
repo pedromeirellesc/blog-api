@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\VoteType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Vote extends Model
 {
@@ -17,12 +19,12 @@ class Vote extends Model
         'vote' => VoteType::class,
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function votable()
+    public function votable(): MorphTo
     {
         return $this->morphTo();
     }
