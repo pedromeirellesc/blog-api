@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follow;
+use App\Services\FollowService;
 use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
+
+    public $followService;
+    public function __construct()
+    {
+        $this->followService = new FollowService();
+    }
     /**
      * @OA\Post(
      *     path="/api/follow/{userId}",
@@ -54,10 +61,7 @@ class FollowController extends Controller
     {
         $followerId = $request->user()->id;
 
-        $request->merge([
-            'follower_id' => (int) $request->user()->id,
-            'followed_id' => $userId,
-        ]);
+        $request = $this->followService->buildRequest($request, $userId);
 
         $request->validate([
             'followed_id' => ['required', 'exists:users,id', 'different:follower_id'],
@@ -66,11 +70,7 @@ class FollowController extends Controller
             'followed_id.different' => 'You cannot follow yourself.',
         ]);
 
-        $exists = Follow::where('followed_id', $userId)
-            ->where('follower_id', $followerId)
-            ->exists();
-
-        if ($exists) {
+        if ($this->followService->isAlreadyFollowing($userId, $followerId)) {
             return response()->json([
                 'message' => 'You are already following this user.',
             ], 422);
